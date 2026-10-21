@@ -1,0 +1,22 @@
+name: Extract complete websites
+on:
+  push:
+    paths:
+      - 'ruslan-5-sites-2026-10-21.zip'
+      - '.github/workflows/unpack-sites.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract sites
+        run: unzip -o ruslan-5-sites-2026-10-21.zip -d .
+      - name: Commit extracted source
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sonora-audio seve-parfum volt-ride atelier-espresso portfolio
+          git diff --cached --quiet || (git commit -m "Extract full website sources" && git push)
